@@ -1,0 +1,41 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+	
+	<bean id="abstractDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close" abstract="true">
+		<property name="initialSize" value="#{coreDao['spring.datasource.initialSize']}" />
+		<property name="maxActive" value="#{coreDao['spring.datasource.maxActive']}" />
+		<property name="minIdle" value="#{coreDao['spring.datasource.minIdle']}" />
+		<property name="removeAbandoned" value="#{coreDao['spring.datasource.removeAbandoned']}" />
+		<property name="removeAbandonedTimeout" value="#{coreDao['spring.datasource.removeAbandonedTimeout']}" />
+		<property name="timeBetweenEvictionRunsMillis" value="#{coreDao['spring.datasource.timeBetweenEvictionRunsMillis']}" />
+		<property name="minEvictableIdleTimeMillis" value="#{coreDao['spring.datasource.minEvictableIdleTimeMillis']}" />
+		<property name="validationQuery" value="#{coreDao['spring.datasource.validationQuery']}" />
+		<property name="testWhileIdle" value="#{coreDao['spring.datasource.testWhileIdle']}" />
+		<property name="testOnBorrow" value="#{coreDao['spring.datasource.testOnBorrow']}" />
+		<property name="testOnReturn" value="#{coreDao['spring.datasource.testOnReturn']}" />
+		<property name="maxOpenPreparedStatements" value="#{coreDao['spring.datasource.maxOpenPreparedStatements']}" />
+		<property name="filters" value="#{coreDao['spring.datasource.filters']}" />
+		<property name="logAbandoned" value="#{coreDao['spring.datasource.logAbandoned']}" />
+	</bean>
+	
+	<bean id="dataSource" class="com.suixingpay.common.core.orm.datasource.ReplicationDataSource">
+		<property name="writeDataSource" ref="writeDataSource"/>
+		<property name="queryDataSource" ref="queryDataSource"/>
+	</bean>
+
+	<bean id="writeDataSource" primary="true" parent="abstractDataSource">
+		<property name="url" value="#{coreDao['spring.datasource.url']}" />
+		<property name="username" value="#{coreDao['spring.datasource.username']}" />
+		<property name="password" value="#{coreDao['spring.datasource.password']}"/>
+	</bean>
+
+	<bean id="queryDataSource" parent="abstractDataSource">
+		<property name="url" value="#{coreDao['spring.datasource.query.url']}" />
+		<property name="username" value="#{coreDao['spring.datasource.query.username']}" />
+		<property name="password" value="#{coreDao['spring.datasource.query.password']}"/>
+	</bean>
+
+</beans>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.suixingpay.mybatis.core.orm.staff.mapper.StaffMapper">
+
+    <resultMap id="Result" type="com.suixingpay.mybatis.core.orm.staff.domain.Staff">
+        <id property="staffId" column="STAFF_ID"/>
+        <result property="staffName" column="STAFF_NAME"/>
+        <result property="sex" column="SEX"/>
+        <result property="chineseName" column="CHINESE_NAME"/>
+        <result property="basicRole" column="BASIC_ROLE"/>
+        <result property="birthday" column="BIRTHDAY"/>
+        <result property="email" column="EMAIL"/>
+        <result property="phone" column="PHONE"/>
+        <result property="hireDate" column="HIRE_DATE"/>
+        <result property="status" column="STATUS"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="modiDate" column="MODI_DATE"/>
+        <result property="operator" column="OPERATOR"/>
+        <result property="userName" column="USER_NAME"/>
+        <result property="passWord" column="PASS_WORD"/>
+    </resultMap>
+
+    <sql id="columns">
+       STAFF_ID,STAFF_NAME,SEX,CHINESE_NAME,BASIC_ROLE,BIRTHDAY,EMAIL,PHONE,HIRE_DATE,STATUS,CREATE_DATE,MODI_DATE,OPERATOR,USER_NAME,PASS_WORD
+    </sql>
+
+    <sql id="dynamicWhere">
+        <where>
+            <if test="@Ognl@isNotEmpty(staffId)">AND STAFF_ID LIKE '%${staffId}%'</if>
+            <if test="@Ognl@isNotEmpty(staffName)">AND STAFF_NAME LIKE '%${staffName}%'</if>
+            <if test="@Ognl@isNotEmpty(sex)">AND SEX LIKE '%${sex}%'</if>
+            <if test="@Ognl@isNotEmpty(chineseName)">AND CHINESE_NAME LIKE '%${chineseName}%'</if>
+            <if test="@Ognl@isNotEmpty(basicRole)">AND BASIC_ROLE LIKE '%${basicRole}%'</if>
+            <if test="@Ognl@isNotEmpty(birthday)">AND BIRTHDAY LIKE '%${birthday}%'</if>
+            <if test="@Ognl@isNotEmpty(email)">AND EMAIL LIKE '%${email}%'</if>
+            <if test="@Ognl@isNotEmpty(phone)">AND PHONE LIKE '%${phone}%'</if>
+            <if test="@Ognl@isNotEmpty(hireDate)">AND HIRE_DATE LIKE '%${hireDate}%'</if>
+            <if test="@Ognl@isNotEmpty(status)">AND STATUS LIKE '%${status}%'</if>
+            <if test="@Ognl@isNotEmpty(createDate)">AND CREATE_DATE LIKE '%${createDate}%'</if>
+            <if test="@Ognl@isNotEmpty(modiDate)">AND MODI_DATE LIKE '%${modiDate}%'</if>
+            <if test="@Ognl@isNotEmpty(operator)">AND OPERATOR LIKE '%${operator}%'</if>
+            <if test="@Ognl@isNotEmpty(userName)">AND OPERATOR LIKE '%${USER_NAME}%'</if>
+            <if test="@Ognl@isNotEmpty(passWord)">AND OPERATOR LIKE '%${PASS_WORD}%'</if>
+
+        </where>
+    </sql>
+
+    <insert id="save" parameterType="com.suixingpay.mybatis.core.orm.staff.domain.Staff">
+        INSERT INTO staff
+        (<include refid="columns"/>)
+        VALUES
+        (#{staffId}, #{staffName},
+        #{sex},#{chineseName},#{basicRole},#{birthday,jdbcType=DATE},#{email},#{phone},#{hireDate,jdbcType=DATE},#{status},#{createDate,jdbcType=DATE},#{modiDate,jdbcType=DATE},#{operator},#{userName},#{passWord})
+    </insert>
+
+    <select id="loginCheck" parameterType="String" resultMap="Result">
+
+        SELECT
+        <include refid="columns"/>
+        FROM STAFF
+        WHERE USER_NAME
+        =#{   userName
+         } OR
+        STAFF_ID
+        =#{
+        staffId
+      }
+    </select>
+
+    <select id="dynquery" parameterType="com.suixingpay.mybatis.core.orm.staff.domain.StaffQuery" resultMap="Result">
+        SELECT
+        <include refid="columns"/>
+        FROM STAFF
+        <where>
+            1 = 1
+            <if test="@Ognl@isNotEmpty(userName)">
+                AND USER_NAME LIKE concat(concat('%',#{userName}),'%')
+            </if>
+            <if test="@Ognl@isNotEmpty(staffId)">
+                AND STAFF_ID = #{staffId}
+            </if>
+            <if test="@Ognl@isNotEmpty(staffName)">
+                AND STAFF_NAME LIKE concat(concat('%',#{staffName}),'%')
+            </if>
+        </where>
+
+
+    </select>
+    <select id="findAll" parameterType="com.suixingpay.mybatis.core.orm.staff.domain.Staff" resultMap="Result">
+
+        SELECT
+        <include refid="columns"/>
+        FROM STAFF
+    </select>
+    <select id="updatePwd" parameterType="com.suixingpay.mybatis.core.orm.staff.domain.Staff">
+
+        UPDATE STAFF
+
+        SET PASS_WORD =#{
+            passWord
+        }
+
+        WHERE USER_NAME =#{
+            userName
+        }
+    </select>
+
+</mapper>

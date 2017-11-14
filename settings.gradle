@@ -1,0 +1,2 @@
+include 'mybatis-service'
+include 'mybatis-core'

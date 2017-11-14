@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
+        ">
+	
+    <context:property-placeholder location="classpath:core/dubbo.properties" />
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+ 	<dubbo:registry protocol="${dubbo.registry.protocol}" address="${dubbo.zookeeper.address}" />
+    <!-- 用dubbo协议在20880端口暴露服务,端口可以改 -->
+    <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" />
+    <dubbo:consumer timeout="${dubbo.consumer.timeout}"/>
+    <dubbo:provider filter="default"/>
+    <!-- 调用其他系统服务 -->
+    <import resource="spring-dubbo-consumer.xml" />
+</beans>

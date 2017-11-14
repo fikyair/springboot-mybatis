@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.suixingpay.mybatis.core.orm.epic.mapper.EpicMapper">
+
+    <resultMap id="Result" type="com.suixingpay.mybatis.core.orm.epic.domain.Epic">
+        <id property="epicId" column="EPIC_ID"/>
+        <result property="projectName" column="PROJECT_NAME"/>
+        <result property="questionType" column="QUESTION_TYPE"/>
+        <result property="epicName" column="EPIC_NAME"/>
+        <result property="topic" column="TOPIC"/>
+        <result property="operationDept" column="OPERATION_DEPT"/>
+        <result property="proposer" column="PROPOSER"/>
+        <result property="priority" column="PRIORITY"/>
+        <result property="demandCollDate" column="DEMAND_COLL_DATE"/>
+        <result property="demandAnalStartDate" column="DEMAND_ANAL_START_DATE"/>
+        <result property="demandAnalEndDate" column="DEMAND_ANAL_END_DATE"/>
+        <result property="createEpicDate" column="CREATE_EPIC_DATE"/>
+        <result property="modiEpicDate" column="MODI_EPIC_DATE"/>
+        <result property="reporter" column="REPORTER"/>
+        <result property="managers" column="MANAGERS"/>
+        <result property="descript" column="DESCRIPT"/>
+        <result property="status" column="STATUS"/>
+    </resultMap>
+
+    <sql id="columns">
+        EPIC_ID,PROJECT_NAME,QUESTION_TYPE,EPIC_NAME,TOPIC,OPERATION_DEPT,PROPOSER,PRIORITY,DEMAND_COLL_DATE,DEMAND_ANAL_START_DATE,DEMAND_ANAL_END_DATE,CREATE_EPIC_DATE,MODI_EPIC_DATE,REPORTER,MANAGERS,DESCRIPT,STATUS
+    </sql>
+
+    <sql id="dynamicWhere">
+        <where>
+            <if test="@Ognl@isNotEmpty(epicId)">AND EPIC_ID LIKE '%${epicId}%'</if>
+            <if test="@Ognl@isNotEmpty(projectName)">AND PROJECT_NAME LIKE '%${projectName}%'</if>
+            <if test="@Ognl@isNotEmpty(questionType)">AND QUESTION_TYPE LIKE '%${questionType}%'</if>
+            <if test="@Ognl@isNotEmpty(epicName)">AND EPIC_NAME LIKE '%${epicName}%'</if>
+            <if test="@Ognl@isNotEmpty(topic)">AND TOPIC LIKE '%${topic}%'</if>
+            <if test="@Ognl@isNotEmpty(operationDept)">AND OPERATION_DEPT LIKE '%${operationDept}%'</if>
+            <if test="@Ognl@isNotEmpty(proposer)">AND PROPOSER LIKE '%${proposer}%'</if>
+            <if test="@Ognl@isNotEmpty(priority)">AND PRIORITY LIKE '%${priority}%'</if>
+            <if test="@Ognl@isNotEmpty(demandCollDate)">AND DEMAND_COLL_DATE LIKE '%${demandCollDate}%'</if>
+            <if test="@Ognl@isNotEmpty(demandAnalStartDate)">AND DEMAND_ANAL_START_DATE LIKE
+                '%${demandAnalStartDate}%'
+            </if>
+            <if test="@Ognl@isNotEmpty(demandAnalEndDate)">AND DEMAND_ANAL_END_DATE LIKE '%${demandAnalEndDate}%'</if>
+            <if test="@Ognl@isNotEmpty(createEpicDate)">AND CREATE_EPIC_DATE LIKE '%${createEpicDate}%'</if>
+            <if test="@Ognl@isNotEmpty(modiEpicDate)">AND MODI_EPIC_DATE LIKE '%${modiEpicDate}%'</if>
+            <if test="@Ognl@isNotEmpty(reporter)">AND REPORTER LIKE '%${reporter}%'</if>
+            <if test="@Ognl@isNotEmpty(managers)">AND MANAGERS LIKE '%${managers}%'</if>
+            <if test="@Ognl@isNotEmpty(descript)">AND DESCRIPT LIKE '%${descript}%'</if>
+            <if test="@Ognl@isNotEmpty(status)">AND STATUS LIKE '%${status}%'</if>
+        </where>
+    </sql>
+
+    <insert id="save" parameterType="com.suixingpay.mybatis.core.orm.staff.domain.Staff">
+        INSERT INTO EPIC
+        (<include refid="columns"/>)
+        VALUES
+        (#{epicId},#{projectName},#{questionType},#{epicName},#{topic},#{operationDept},#{proposer},#{priority},#{demandCollDate,jdbcType=DATE},#{demandAnalStartDate,jdbcType=DATE},#{demandAnalEndDate,jdbcType=DATE},#{createEpicDate,jdbcType=DATE},#{modiEpicDate,jdbcType=DATE},#{reporter},#{managers},#{descript},#{status})
+    </insert>
+
+    <select id="epicQuery" parameterType="com.suixingpay.mybatis.core.orm.epic.domain.EpicQuery" resultMap="Result">
+        SELECT <include refid="columns"/>
+
+        FROM EPIC
+        <where>
+            1 = 1
+            <if test="@Ognl@isNotEmpty(epicId)">
+                AND EPIC_ID = #{epicId}
+            </if>
+            <if test="@Ognl@isNotEmpty(proposer)">
+                AND PROPOSER = #{proposer}
+            </if>
+            <if test="@Ognl@isNotEmpty(topic)">
+                AND TOPIC LIKE concat(concat('%',#{topic}),'%')
+            </if>
+            <if test="@Ognl@isNotEmpty(demandCollDateStart)">
+                AND DEMAND_COLL_DATE &gt;={demandCollDateStart}
+            </if>
+            <if test="@Ognl@isNotEmpty(demandCollDateEnd)">
+                AND DEMAND_COLL_DATE &lt;= #{demandCollDateEnd}
+            </if>
+
+            <if test="@Ognl@isNotEmpty(demandAnalStartDate)">
+                AND DEMAND_ANAL_START_DATE &gt;= #{demandAnalStartDate}
+            </if>
+            <if test="@Ognl@isNotEmpty(demandAnalEndDate)">
+                AND DEMAND_ANAL_END_DATE &lt;= #{demandAnalEndDate}
+            </if>
+            <if test="@Ognl@isNotEmpty(status)">
+                AND STATUS = #{status}
+
+            </if>
+        </where>
+
+    </select>
+
+    <select id="findAllEpic" parameterType="com.suixingpay.mybatis.core.orm.epic.domain.Epic" resultMap="Result">
+        SELECT
+        <include refid="columns"/>
+        FROM EPIC
+
+    </select>
+    <select id="findOneEpic" parameterType="com.suixingpay.mybatis.core.orm.epic.domain.Epic" resultMap="Result">
+        SELECT
+        <include refid="columns"/>
+        FROM EPIC
+
+        WHERE EPIC_ID
+        =#{
+            epic_id
+        }
+
+    </select>
+
+
+</mapper>

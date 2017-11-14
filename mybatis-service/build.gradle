@@ -1,0 +1,34 @@
+bootRepackage {
+    enabled = true
+}
+/*jsp配置*/
+apply plugin: 'war'
+
+dependencies {
+    compile project(":mybatis-core")
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    {
+ 	 exclude group: 'org.slf4j', module: 'slf4j-api'
+ 	 exclude group: 'ch.qos.logback', module: 'logback-classic'
+	}
+    compile('io.springfox:springfox-swagger2:2.6.1')
+    {
+	  exclude group: 'org.slf4j', module: 'slf4j-api'
+	  exclude group: 'ch.qos.logback', module: 'logback-classic'
+	}
+    compile('io.springfox:springfox-swagger-ui:2.6.1'){
+	  exclude group: 'org.slf4j', module: 'slf4j-api'
+	  exclude group: 'ch.qos.logback', module: 'logback-classic'
+	}
+    testCompile('org.springframework.boot:spring-boot-starter-test'){
+  		exclude group: 'org.slf4j', module: 'slf4j-api'
+ 		exclude group: 'ch.qos.logback', module: 'logback-classic'
+	}
+	/*jsp依赖*/
+	compile("javax.servlet:jstl:1.2")
+	compile 'org.springframework.boot:spring-boot-starter-tomcat'
+	compile 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	//验证码
+	compile 'com.github.penggle:kaptcha:2.3.2'
+
+}

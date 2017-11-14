@@ -1,0 +1,40 @@
+spring:
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+  application:
+    name: mybatis-service
+  profiles:
+    active: ${profile:dev}
+  mail:
+    host: smtphm.qiye.163.com
+    form: xue_sm@suixingpay.com
+    port: 25
+    username: xue_sm@suixingpay.com
+    password: Q1w2e3r4t5
+
+server:
+  port: ${port:8080}
+#分页默认参数
+page:
+  pageNum: 1
+  pageSize: 10
+swagger2:
+  basePackage: com.suixingpay.mybatis.service.controller
+  title:  mybatisRESTF-API列表
+  contact-name: 随行付支付有限公司
+  contact-url: https://www.suixingpay.com
+  email: li_yang@suixingpay.com
+  version: 1.0
+
+---
+#开发环境配置
+spring:
+  profiles: dev
+
+
+---
+#测试环境配置
+spring:
+  profiles: test
