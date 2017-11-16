@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class LoginService {
+public class LoginServiceImpl {
 
     @Autowired
     private StaffMapper staffMapper;
